@@ -2,18 +2,39 @@ var restify = require('restify');
 var builder = require('botbuilder');
 
 // Get secrets from server environment
-var botConnectorOptions = { 
-    appId: process.env.BOTFRAMEWORK_APPID, 
-    appSecret: process.env.BOTFRAMEWORK_APPSECRET 
+var botConnectorOptions = {
+    appId: process.env.BOTFRAMEWORK_APPID,
+    appSecret: process.env.BOTFRAMEWORK_APPSECRET
 };
 
 // Create bot
 var bot = new builder.BotConnectorBot(botConnectorOptions);
-bot.add('/', function (session) {
-    
-    //respond with user's message
-    session.send("You said " + session.message.text);
-});
+var dialog = new builder.CommandDialog();
+bot.add('/', dialog
+    .matches('^hello', function (session) {
+        session.send("Hey I'm dinnerbot");
+    })
+    .matches('^menu', function (session) {
+        session.send("http://pressedcafe.com/menu/");
+    })
+    .matches('^menupdf', function (session) {
+        session.send("http://pressedcafe.com/wp-content/uploads/2015/11/Take-out-menu-08_15.pdf");
+    })
+    .matches('^specials', function (session) {
+        session.send("http://pressedcafe.com/specials/");
+    })
+    .onDefault(function (session) {
+        session.send("I didn't understand. Say hello to me!");
+}));
+
+dialog.matches('^version', builder.DialogAction.send('Bot version 1.2'));
+
+
+// bot.add('/menu', [
+//   function (session){
+//     session.send("http://pressedcafe.com/menu/")
+//   }
+// ])
 
 // Setup Restify Server
 var server = restify.createServer();
@@ -28,5 +49,5 @@ server.get(/.*/, restify.serveStatic({
 }));
 
 server.listen(process.env.port || 3978, function () {
-    console.log('%s listening to %s', server.name, server.url); 
+    console.log('%s listening to %s', server.name, server.url);
 });
