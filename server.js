@@ -12,7 +12,7 @@ var bot = new builder.BotConnectorBot(botConnectorOptions);
 var dialog = new builder.CommandDialog();
 bot.add('/', dialog
     .matches('^hello', function (session) {
-        session.send("Hey I'm dinnerbot");
+        session.send("Hey I'm dinnerbot!");
     })
     .matches('^menupdf', function (session) {
         session.send("http://pressedcafe.com/wp-content/uploads/2015/11/Take-out-menu-08_15.pdf");
@@ -26,11 +26,14 @@ bot.add('/', dialog
     .matches('^name', function (session) {
         session.send(session.message.from.name);
     })
+    .matches('^address', function (session) {
+        session.send(session.message.from.address);
+    })
     .onDefault(function (session) {
         session.send("I didn't understand. Say hello to me!");
 }));
 
-dialog.matches('^version', builder.DialogAction.send('Bot version 1.2'));
+dialog.matches('^version', builder.DialogAction.send('Bot version 0.1'));
 
 
 // bot.add('/menu', [
