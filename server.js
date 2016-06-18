@@ -14,14 +14,17 @@ bot.add('/', dialog
     .matches('^hello', function (session) {
         session.send("Hey I'm dinnerbot");
     })
-    .matches('^menu', function (session) {
-        session.send("http://pressedcafe.com/menu/");
-    })
     .matches('^menupdf', function (session) {
         session.send("http://pressedcafe.com/wp-content/uploads/2015/11/Take-out-menu-08_15.pdf");
     })
+    .matches('^menu', function (session) {
+        session.send("http://pressedcafe.com/menu/");
+    })
     .matches('^specials', function (session) {
         session.send("http://pressedcafe.com/specials/");
+    })
+    .matches('^name', function (session) {
+        session.send(session.message.from.name);
     })
     .onDefault(function (session) {
         session.send("I didn't understand. Say hello to me!");
