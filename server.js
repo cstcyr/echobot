@@ -29,11 +29,47 @@ bot.add('/', dialog
     .matches('^address', function (session) {
         session.send(session.message.from.address);
     })
+    .matches('^order', function (session) {
+        session.beginDialog('/order');
+    })
+    .matches('^profile', function (session) {
+        session.beginDialog('/profile');
+    })
     .onDefault(function (session) {
         session.send("I didn't understand. Say hello to me!");
 }));
 
-dialog.matches('^version', builder.DialogAction.send('Bot version 0.1'));
+
+bot.add('/order', [
+  function (session) {
+    builder.Prompts.text(session, "What would you like to order for dinner?");
+  },
+  function (session, results){
+    session.userData.order = results.response;
+    //session.send("Ok I'll put your order in for " + session.userData.order)
+    session.endDialog();
+  }
+ ]);
+
+ // bot.add('/', function (session) {
+ //     if (!session.userData.order) {
+ //         session.beginDialog('/order');
+ //     } else {
+ //         session.send("Ok I'll put your order in for " + session.userData.order)
+ //     }
+ // });
+
+ bot.add('/profile', [
+    function (session) {
+        builder.Prompts.text(session, 'Hi! What is your name?');
+    },
+    function (session, results) {
+        session.userData.name = results.response;
+        session.endDialog();
+    }
+]);
+
+dialog.matches('^version', builder.DialogAction.send('dinnerBot version 0.1'));
 
 
 // bot.add('/menu', [
